@@ -4,5 +4,7 @@ public enum TaskCategory {
     GENERAL,
     WORK,
     PERSONAL,
-    STUDY
+    STUDY,
+    HEALTH,
+    FINANCE
 }
