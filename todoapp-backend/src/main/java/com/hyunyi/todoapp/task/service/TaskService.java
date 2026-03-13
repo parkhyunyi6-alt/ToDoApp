@@ -3,22 +3,19 @@ package com.hyunyi.todoapp.task.service;
 import com.hyunyi.todoapp.common.exception.TaskNotFoundException;
 import com.hyunyi.todoapp.task.dto.request.UpdateTaskRequest;
 import com.hyunyi.todoapp.task.dto.request.UpdateTaskStateRequest;
-import com.hyunyi.todoapp.task.dto.request.UpdateTaskHiddenRequest;
-import com.hyunyi.todoapp.task.entity.Task;
-import com.hyunyi.todoapp.task.repository.TaskRepository;
 import com.hyunyi.todoapp.task.dto.response.TaskResponse;
+import com.hyunyi.todoapp.task.entity.Task;
 import com.hyunyi.todoapp.task.enumtype.TaskCategory;
 import com.hyunyi.todoapp.task.enumtype.TaskState;
+import com.hyunyi.todoapp.task.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
-import java.util.List;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -29,18 +26,22 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    public Page<TaskResponse> getTasks(int page, int size, TaskCategory category, TaskState state) {
+    public Page<TaskResponse> getTasks(
+            int page,
+            int size,
+            String keyword,
+            TaskCategory category,
+            TaskState state
+    ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        String normalizedKeyword = normalizeKeyword(keyword);
         Page<Task> taskPage;
 
-        if(category != null && state != null) {
-            taskPage = taskRepository.findByDeletedAtIsNullAndCategoryAndState(category, state, pageable);
-        } else if(category != null) {
-            taskPage = taskRepository.findByDeletedAtIsNullAndCategory(category, pageable);
-        } else if(state != null) {
-            taskPage = taskRepository.findByDeletedAtIsNullAndState(state, pageable);
+        if (hasKeyword(normalizedKeyword)) {
+            taskPage = getTasksByKeyword(normalizedKeyword, category, state, pageable);
         } else {
-            taskPage = taskRepository.findByDeletedAtIsNull(pageable);
+            taskPage = getTasksWithoutKeyword(category, state, pageable);
         }
 
         return taskPage.map(TaskResponse::from);
@@ -53,36 +54,31 @@ public class TaskService {
         return TaskResponse.from(savedTask);
     }
 
-    @Transactional
     public TaskResponse getTask(UUID taskId) {
-        Task task = taskRepository.findById(taskId)
-                .filter(foundTask -> foundTask.getDeletedAt() == null)
-                .orElseThrow(()-> new TaskNotFoundException("Task not found. id: " + taskId));
+        Task task = getActiveTask(taskId);
         return TaskResponse.from(task);
     }
 
     @Transactional
     public TaskResponse updateTask(UUID taskId, UpdateTaskRequest request) {
-        Task task = taskRepository.findById(taskId)
-                .filter(foundTask -> foundTask.getDeletedAt() == null)
-                .orElseThrow(()-> new TaskNotFoundException("Task not found. id: " + taskId));
+        Task task = getActiveTask(taskId);
 
-        if(request.title() !=null) {
-            if(request.title().isBlank()) {
+        if (request.title() != null) {
+            if (request.title().isBlank()) {
                 throw new IllegalArgumentException("title is required");
             }
             task.changeTitle(request.title());
         }
 
-        if(request.description() !=null) {
+        if (request.description() != null) {
             task.changeDescription(request.description());
         }
 
-        if(request.taskDate() !=null) {
+        if (request.taskDate() != null) {
             task.changeTaskDate(request.taskDate());
         }
 
-        if(request.category() !=null) {
+        if (request.category() != null) {
             task.changeCategory(request.category());
         }
 
@@ -91,33 +87,102 @@ public class TaskService {
 
     @Transactional
     public void deleteTask(UUID taskId) {
-        Task task = taskRepository.findById(taskId)
-                .filter(foundTask -> foundTask.getDeletedAt() == null)
-                .orElseThrow(()-> new TaskNotFoundException("Task not found. id: " + taskId));
-
+        Task task = getActiveTask(taskId);
         task.markDeleted();
     }
 
     @Transactional
     public TaskResponse updateState(UUID taskId, UpdateTaskStateRequest request) {
-        Task task = taskRepository.findById(taskId)
-                .filter(foundTask -> foundTask.getDeletedAt() == null)
-                .orElseThrow(()-> new TaskNotFoundException("Task not found. id: " + taskId));
-
+        Task task = getActiveTask(taskId);
         task.changeState(request.state());
-
-        Task updatedTask = taskRepository.save(task);
-        return TaskResponse.from(updatedTask);
+        return TaskResponse.from(task);
     }
-    @Transactional
-    public TaskResponse updateHidden(UUID taskId, UpdateTaskHiddenRequest request) {
-        Task task = taskRepository.findById(taskId)
+
+    /* basic search */
+    private Page<Task> getTasksWithoutKeyword(
+            TaskCategory category,
+            TaskState state,
+            Pageable pageable
+    ) {
+        if (category != null && state != null) {
+            return taskRepository.findByDeletedAtIsNullAndCategoryAndState(category, state, pageable);
+        }
+
+        if (category != null) {
+            return taskRepository.findByDeletedAtIsNullAndCategoryAndStateNot(
+                    category,
+                    TaskState.ARCHIVED,
+                    pageable
+            );
+        }
+
+        if (state != null) {
+            return taskRepository.findByDeletedAtIsNullAndState(state, pageable);
+        }
+
+        return taskRepository.findByDeletedAtIsNullAndStateNot(
+                TaskState.ARCHIVED,
+                pageable
+        );
+    }
+
+    /* search by keyword */
+    private Page<Task> getTasksByKeyword(
+            String keyword,
+            TaskCategory category,
+            TaskState state,
+            Pageable pageable
+    ) {
+        if (category != null && state != null) {
+            return taskRepository.searchTasksByCategoryAndState(
+                    keyword,
+                    category,
+                    state,
+                    pageable
+            );
+        }
+
+        if (category != null) {
+            return taskRepository.searchActiveTasksByCategory(
+                    keyword,
+                    category,
+                    TaskState.ARCHIVED,
+                    pageable
+            );
+        }
+
+        if (state != null) {
+            return taskRepository.searchTasksByState(
+                    keyword,
+                    state,
+                    pageable
+            );
+        }
+
+        return taskRepository.searchActiveTasks(
+                keyword,
+                TaskState.ARCHIVED,
+                pageable
+        );
+    }
+
+    /* keyword normalization */
+    private boolean hasKeyword(String keyword) {
+        return keyword != null && !keyword.isBlank();
+    }
+
+    private String normalizeKeyword(String keyword) {
+        if (keyword == null) {
+            return null;
+        }
+
+        return keyword.trim();
+    }
+
+    /* search active task by id */
+    private Task getActiveTask(UUID taskId) {
+        return taskRepository.findById(taskId)
                 .filter(foundTask -> foundTask.getDeletedAt() == null)
-                .orElseThrow(()-> new TaskNotFoundException("Task not found. id: " + taskId));
-
-        task.changeHidden(request.isHidden());
-
-        Task updatedTask = taskRepository.save(task);
-        return TaskResponse.from(updatedTask);
+                .orElseThrow(() -> new TaskNotFoundException("Task not found. id: " + taskId));
     }
 }

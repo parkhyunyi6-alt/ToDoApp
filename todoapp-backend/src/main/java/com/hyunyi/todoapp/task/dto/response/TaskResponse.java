@@ -15,7 +15,6 @@ public record TaskResponse(
         LocalDate taskDate,
         TaskCategory category,
         TaskState state,
-        boolean isHidden,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -27,7 +26,6 @@ public record TaskResponse(
                 task.getTaskDate(),
                 task.getCategory(),
                 task.getState(),
-                task.isHidden(),
                 task.getCreatedAt(),
                 task.getUpdatedAt()
         );

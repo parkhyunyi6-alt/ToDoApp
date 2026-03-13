@@ -45,9 +45,6 @@ public class Task {
     @Column(name = "state", nullable = false, length = 50)
     private TaskState state;
 
-    @Column(name="is_hidden", nullable = false)
-    private boolean isHidden;
-
     @Column(name="created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -63,7 +60,6 @@ public class Task {
         this.taskDate = taskDate;
         this.category = category !=null ? category : TaskCategory.GENERAL;
         this.state = TaskState.TODO;
-        this.isHidden = false;
     }
 
     @PrePersist
@@ -96,10 +92,6 @@ public class Task {
 
     public void changeState(TaskState state) {
         this.state = state;
-    }
-
-    public void changeHidden(boolean isHidden) {
-        this.isHidden = isHidden;
     }
 
     public void markDeleted() {

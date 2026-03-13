@@ -1,13 +1,12 @@
 package com.hyunyi.todoapp.task.controller;
 
+
+import com.hyunyi.todoapp.common.response.ApiResponse;
 import com.hyunyi.todoapp.task.dto.request.CreateTaskRequest;
 import com.hyunyi.todoapp.task.dto.request.UpdateTaskRequest;
 import com.hyunyi.todoapp.task.dto.request.UpdateTaskStateRequest;
-import com.hyunyi.todoapp.task.dto.request.UpdateTaskHiddenRequest;
 import com.hyunyi.todoapp.task.dto.response.TaskResponse;
-import com.hyunyi.todoapp.task.entity.Task;
 import com.hyunyi.todoapp.task.service.TaskService;
-
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +19,21 @@ import com.hyunyi.todoapp.task.enumtype.TaskCategory;
 import com.hyunyi.todoapp.task.enumtype.TaskState;
 
 @RestController
-@RequestMapping("/api/tasks")
 @RequiredArgsConstructor
+@RequestMapping("/api/tasks")
 public class TaskController {
     private final TaskService taskService;
 
     @GetMapping
-    public Page<TaskResponse> getTasks(
+    public ApiResponse<Page<TaskResponse>> getTasks(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false) TaskCategory category,
             @RequestParam(required = false) TaskState state
     ) {
-        return taskService.getTasks(page, size, category, state);
+        Page<TaskResponse> taskPage = taskService.getTasks(page, size, keyword, category, state);
+        return ApiResponse.success(taskPage);
     }
 
     @PostMapping
@@ -71,11 +72,4 @@ public class TaskController {
         return taskService.updateState(taskId, request);
     }
 
-    @PatchMapping("/{taskId}/hidden")
-    public TaskResponse updateTaskHidden(
-            @PathVariable UUID taskId,
-            @Valid @RequestBody UpdateTaskHiddenRequest request
-    ) {
-        return taskService.updateHidden(taskId, request);
-    }
 }
