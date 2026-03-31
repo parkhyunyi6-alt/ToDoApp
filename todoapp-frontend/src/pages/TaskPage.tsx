@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
+import Header from "../components/layout/Header.tsx";
 
 import { getTasks } from "../api/taskApi.ts";
 
-
 import TaskList from "../components/task/TaskList.tsx";
 import TaskFormModal from "../components/task/TaskFormModal.tsx";
-import FloatingCreateButton from "../components/task/FloatingCreateButton.tsx";
+import FloatingCreateButton from "../components/Common/FloatingCreateButton.tsx";
 import TaskSearchBar from "../components/task/TaskSearchBar.tsx";
 import TaskFilter from "../components/task/TaskFilter.tsx";
+
+import styles from "./TaskPage.module.css";
 
 import type { TaskResponse, TaskCategory, TaskState } from "../types/task.ts";
 
@@ -76,8 +78,8 @@ export default function TaskPage() {
         setIsTaskFormModalOpen(false);
     }
     return (
-        <main>
-            <h1>To Do App</h1>
+        <div className={styles.taskPage}>
+            <Header />
 
             <TaskSearchBar
                 keyword={keyword}
@@ -117,6 +119,6 @@ export default function TaskPage() {
                 onClose={handleCloseCreateModal}
                 onSuccess={loadTaskList}
             />
-        </main>
+        </div>
     )
 }

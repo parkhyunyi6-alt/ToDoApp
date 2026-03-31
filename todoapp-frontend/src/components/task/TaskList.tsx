@@ -1,5 +1,6 @@
 import type { TaskResponse } from "../../types/task";
 import TaskItem from "./TaskItem";
+import styles from "./TaskList.module.css";
 
 interface TaskListProps {
     taskList: TaskResponse[];
@@ -11,7 +12,7 @@ function TaskList({ taskList }: TaskListProps) {
     }
 
     return (
-        <section>
+        <section className={styles.taskList}>
             {taskList.map((task) => (
                 <TaskItem key={task.id} task={task} />
             ))}

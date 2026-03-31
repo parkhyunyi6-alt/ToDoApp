@@ -1,11 +1,48 @@
+:root {
+    /* 바탕 및 기본 텍스트 */
+    --background-color: #FEFDFB;
+    --text-color: #3A3A3A;
+    --border-color: #8D8D8D;
+    --point-text-color: #2B78EB;
+
+
+    /* 메인 포인트 (Primary) - 부드러운 파란색 */
+    --primary-color: #A5D1FF;
+    --primary-color-hover: #D0E7FF;
+
+    /* 서브 포인트 (Secondary) - 세련된 다크 그레이 */
+    --secondary-color: #5C6B89;
+    --secondary-color-hover: #7A8BA8;
+
+    /* 기타 UI 요소 */
+    --tertiary-color: #B8C6DB;
+    --tertiary-color-hover: #D1DAE7;
+    --selected-color: #E3F2FF;
+    --disable-color: #E0E0E0;
+
+    /* 상태 알림 (파스텔 톤) */
+    --error-color: #FFB3BA;   /* 연한 핑크색 레드 */
+    --success-color: #BAFFC9; /* 연한 민트색 그린 */
+    --warning-color: #FFFFBA; /* 연한 레몬색 옐로우 */
+    --info-color: #BAE1FF;    /* 연한 하늘색 블루 */
+    --radius: 8px;
+
+    --logo-text-weight: 600;
+    --logo-text-size: 24px;
+
+
+}
+
+
 * {
     box-sizing: border-box;
 }
 
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f7f8fa;
+    margin: 12px;
+    font-family: Inter;
+    background-color: #ffffff;
     color: #222;
 }
 
