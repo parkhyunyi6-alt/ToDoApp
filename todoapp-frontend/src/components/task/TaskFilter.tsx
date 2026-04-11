@@ -41,7 +41,7 @@ function TaskFilter({
                     onChangeState((event.target.value as TaskState | "") || "")
                 }
                 options={[
-                    { value: "", label: "ALL State" },
+                    { value: "", label: "Active State" },
                     { value: "TODO", label: "TODO" },
                     { value: "IN_PROGRESS", label: "IN_PROGRESS" },
                     { value: "DONE", label: "DONE" },

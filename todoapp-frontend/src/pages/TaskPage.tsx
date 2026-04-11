@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/layout/Header.tsx";
 
-import {getTasks, createTask, updateTask, deleteTask} from "../api/taskApi.ts";
+import {getTasks, createTask, updateTask, deleteTask, updateTaskState} from "../api/taskApi.ts";
 
 import TaskList from "../components/task/TaskList.tsx";
 import TaskFormModal from "../components/task/TaskFormModal.tsx";
@@ -62,7 +62,17 @@ export default function TaskPage() {
 
     useEffect(() => {
         loadTaskList();
-    }, [page, size]);
+    },  [page, size, keyword, category, state]);
+
+    const handleChangeTaskState = async (taskId: string, nextState: TaskState) => {
+        try {
+            await updateTaskState(taskId, { state: nextState });
+            await loadTaskList();
+        } catch (error) {
+            console.error("Failed to update task state", error);
+            alert("상태 변경에 실패했습니다.");
+        }
+    };
 
     const handleSearch = () => {
         setPage(0);
@@ -146,11 +156,12 @@ export default function TaskPage() {
             />
 
             {isLodading && <p>Loading...</p>}
-            {errorMessages && <p>{errorMessages}</p>}
+            {errorMessages && <div className={styles.errorMessage} >{errorMessages}</div>}
             {!isLodading && !errorMessages &&
                 (<TaskList
                     taskList={taskList}
                     onClickDetail={handleOpenUpdateModal}
+                    onChangeState={handleChangeTaskState}
                 />)}
             <div className={styles.pageButton}>
                 {Array.from({ length: totalPages}).map((_, index) => (
@@ -160,6 +171,7 @@ export default function TaskPage() {
                         disabled={page === index}
                         variant={page === index ? "primary" : "secondary"}
                         size={"sm"}
+                        onClick={() => setPage(index)}
                     >
                         {index + 1}
                     </Button>

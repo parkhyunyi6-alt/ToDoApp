@@ -33,7 +33,13 @@ public class TaskService {
             TaskCategory category,
             TaskState state
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(
+                Sort.Order.desc("createdAt"),
+                Sort.Order.desc("id")
+        ));
 
         String normalizedKeyword = normalizeKeyword(keyword);
         Page<Task> taskPage;
