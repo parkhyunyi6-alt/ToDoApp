@@ -4,9 +4,10 @@ import styles from "./TaskList.module.css";
 
 interface TaskListProps {
     taskList: TaskResponse[];
+    onClickDetail: (task: TaskResponse) => void;
 }
 
-function TaskList({ taskList }: TaskListProps) {
+function TaskList({ taskList, onClickDetail }: TaskListProps) {
     if (taskList.length === 0) {
         return <p>No tasks found.</p>;
     }
@@ -14,7 +15,11 @@ function TaskList({ taskList }: TaskListProps) {
     return (
         <section className={styles.taskList}>
             {taskList.map((task) => (
-                <TaskItem key={task.id} task={task} />
+                <TaskItem
+                    key={task.id}
+                    task={task}
+                    onClickDetail={onClickDetail}
+                />
             ))}
         </section>
     );

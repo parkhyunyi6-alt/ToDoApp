@@ -1,0 +1,100 @@
+.button {
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+.button_sm {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+}
+
+.button_md {
+    height: 40px;
+    padding: 0 16px;
+    font-size: 14px;
+}
+
+.button_lg {
+    height: 48px;
+    padding: 0 20px;
+    font-size: 15px;
+}
+
+.button_primary {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.button_primary:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.button_secondary {
+    background-color: #e5e7eb;
+    color: #111827;
+}
+
+.button_secondary:hover:not(:disabled) {
+    background-color: #d1d5db;
+}
+
+.button_ghost {
+    background-color: transparent;
+    color: #374151;
+}
+
+.button_ghost:hover:not(:disabled) {
+    background-color: #f3f4f6;
+}
+
+.button_danger {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.button_danger:hover:not(:disabled) {
+    background-color: #b91c1c;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.button_page_active {
+    background-color: #2563eb;
+    color: #ffffff;
+    width: 20px;
+    height: 30px;
+    padding: 0 16px;
+    font-size: 14px;
+}
+.button_page_active:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+.button_page_active:active {
+    transform: scale(0.98);
+}
+.button_page_default {
+    background-color: #e5e7eb;
+    color: #111827;
+    width: 20px;
+    height: 30px;
+    padding: 0 16px;
+    font-size: 14px;
+}
+.button_page_default:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}

@@ -3,3 +3,14 @@
     flex-direction: column;
     gap: 8px;
 }
+
+.pageButton {
+    display: flex;
+    justify-content: center;
+}
+
+.pageButton > div {
+    width: fit-content;
+    display: flex;
+    gap: 8px;
+}

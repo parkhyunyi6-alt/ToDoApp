@@ -1,4 +1,7 @@
 import type { TaskCategory, TaskState } from "../../types/task";
+import {Button} from "../Common/Button.tsx";
+import { Select } from "../Common/Select.tsx";
+import styles from "./TaskFilter.module.css";
 
 interface TaskFilterProps {
     category: TaskCategory | "";
@@ -16,34 +19,39 @@ function TaskFilter({
                         onApply,
                     }: TaskFilterProps) {
     return (
-        <section>
-            <select
+        <section className={styles.taskFilter}>
+            <Select
                 value={category}
                 onChange={(event) =>
                     onChangeCategory((event.target.value as TaskCategory | "") || "")
                 }
-            >
-                <option value="">All Category</option>
-                <option value="GENERAL">GENERAL</option>
-            </select>
-
-            <select
+                options={[
+                    {value: "", label: "ALL Category"},
+                    { value: "GENERAL", label: "GENERAL" },
+                    { value: "WORK", label: "WORK" },
+                    { value: "PERSONAL", label: "PERSONAL" },
+                    { value: "STUDY", label: "STUDY" },
+                    { value: "HEALTH", label: "HEALTH" },
+                    { value: "FINANCE", label: "FINANCE" },
+                ]}
+            />
+            <Select
                 value={state}
                 onChange={(event) =>
                     onChangeState((event.target.value as TaskState | "") || "")
                 }
-            >
-                <option value="">All State</option>
-                <option value="TODO">TODO</option>
-                <option value="IN_PROGRESS">IN_PROGRESS</option>
-                <option value="DONE">DONE</option>
-                <option value="CANCELLED">CANCELLED</option>
-                <option value="ARCHIVED">ARCHIVED</option>
-            </select>
-
-            <button type="button" onClick={onApply}>
+                options={[
+                    { value: "", label: "ALL State" },
+                    { value: "TODO", label: "TODO" },
+                    { value: "IN_PROGRESS", label: "IN_PROGRESS" },
+                    { value: "DONE", label: "DONE" },
+                    { value: "CANCELLED", label: "CANCELLED" },
+                    { value: "ARCHIVED", label: "ARCHIVED" },
+                ]}
+            />
+            <Button onClick={onApply}>
                 Apply
-            </button>
+            </Button>
         </section>
     );
 }

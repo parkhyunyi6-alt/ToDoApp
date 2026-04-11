@@ -58,6 +58,11 @@ export async function updateTaskState(
     return response.data.data;
 }
 
+export async function deleteTasks(taskId: string): Promise<void> {
+    const response = await taskApi.delete(`/api/tasks/${taskId}`);
+    return response.data;
+}
+
 export async function deleteTask(taskId: string): Promise<void> {
     await taskApi.delete(`/api/tasks/${taskId}`);
 }
