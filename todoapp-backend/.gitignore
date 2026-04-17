@@ -51,10 +51,9 @@ target/
 ####################################
 # Local configuration (중요)
 ####################################
-*.properties
+application.properties
 application-local.properties
 application-dev.properties
-application-prod.properties
 
 ####################################
 # AWS / SSH
@@ -68,10 +67,4 @@ application-prod.properties
 *.db
 *.sqlite
 
-
-####################################
-# Git Ignore
-####################################
-build.gradle.kts
-settings.gradle.kts
 
