@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f183536f-4938-4f77-804e-32ad3e844b65" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/todoapp-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/todoapp-frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todoapp-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/todoapp-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/todoapp-backend/src/main/java/com/hyunyi/todoapp/common/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/todoapp-backend/src/main/java/com/hyunyi/todoapp/common/config/WebConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +19,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="3Csh9SE7dKowwN88Fj8CEEAWPO7" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -31,8 +35,10 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Sources/todoapp",
     "nodejs_package_manager_path": "npm",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
@@ -54,6 +60,7 @@
       <option name="presentableId" value="Default" />
       <updated>1773204166891</updated>
       <workItem from="1773204168489" duration="27000" />
+      <workItem from="1777180034089" duration="279000" />
     </task>
     <servers />
   </component>
